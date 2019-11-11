@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Solo Project</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.css"/>
+
+</head>
+<body>
+<!--<link type="text/html" rel="import" href="header.html">-->
+<div data-th-include="header.html"></div>
+<div data-th-include="leftBarAdmin.html"></div>
+
+<div class="container-userList">
+    <h1>Admin panel</h1><br/>
+    <div class="container-header-admin-panel">
+        <div class="shadow-lg container-white container-header-admin-panel-tab">
+            <a href="/userlist"><h4 class="text-black-50">Users table</h4></a>
+        </div>
+        <div class="container-custom container-header-admin-panel-tab">
+            <a href="/add"><h4 class="text-blue">New User</h4></a>
+        </div>
+    </div>
+    <div class="shadow-lg container-my">
+        <h4 class="text-black-50">All Users</h4>
+    </div>
+    <div class="container-white">
+        <table class="table table-striped container-white">
+            <th:block th:each="appUser, iterStat : ${users}" >
+
+                <tr>
+                    <td th:text="${appUser.id}">Id</td>
+                    <td th:text="${appUser.roles}">Role</td>
+                    <td th:text="${appUser.name}">Login</td>
+                    <td th:text="${appUser.password}">Password</td>
+                    <td th:text="${appUser.email}">Email</td>
+                    <td>
+
+                        <button type="button" class="btn btn-primary active btn-custom"
+                                data-toggle="modal" th:attr="data-target='#myModal' + ${iterStat.index}"
+                                aria-pressed="true" name="edit">Edit
+                        </button>
+                        <form th:method="post" th:action="@{/edit}">
+                            <div class="modal fade" th:id="myModal + ${iterStat.index}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 th:text="'Edit user  ' + ${iterStat.current.name}"></h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-add">
+                                                <h4 class="text-black-50" style="text-align: center">ID</h4>
+                                                <input type="number" name="id" class="form-control"
+                                                       th:value="${iterStat.current.id}" style="width: 400px" disabled />
+                                                <h4 class="text-black-50" style="text-align: center">Email</h4>
+                                                <input type="email" name="email" class="form-control"
+                                                       th:value="${iterStat.current.email}" />
+                                                <h4 class="text-black-50" style="text-align: center">Login</h4>
+                                                <input type="text" name="name" class="form-control"
+                                                       th:value="${iterStat.current.name}" />
+                                                <h4 class="text-black-50" style="text-align: center">Password</h4>
+                                                <input type="password" name="password" class="form-control"/>
+                                                <h4 class="text-black-50" style="text-align: center">Role</h4>
+                                                <select name="role" class="form-control" th:placeholder="Role" required="">
+                                                    <option>USER</option>
+                                                    <option>ADMIN</option>
+                                                </select>
+                                                <input type="hidden" name="id" th:value="${iterStat.current.id}" />
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary">Close
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">Edit user</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form method="post" action="/delete">
+                            <input type="submit" class="btn btn-primary active btn-custom" value="Удалить"
+                                   role="button" aria-pressed="true" name="delete">
+                            <input type="hidden" th:value="${appUser.id}" name="id">
+                        </form>
+                    </td>
+                </tr>
+
+            </th:block>
+        </table>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>
