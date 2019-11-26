@@ -13,90 +13,60 @@
 <div data-th-include="header.html"></div>
 <div data-th-include="leftBarAdmin.html"></div>
 
-<div class="container-userList">
-    <h1>Admin panel</h1><br/>
-    <div class="container-header-admin-panel">
-        <div class="shadow-lg container-white container-header-admin-panel-tab">
-            <a href="/userlist"><h4 class="text-black-50">Users table</h4></a>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main container-userList">
+    <h1 class="page-header">Admin panel</h1>
+    <ul class="nav nav-tabs" role="tablist">
+
+        <li role="presentation" class=""><a class="" href="#tab1" role="tab" data-toggle="tab" id="resetTable">Users
+            table</a></li>
+        <li role="presentation"><a class="active" href="#tab2" role="tab" data-toggle="tab">New User</a></li>
+    </ul>
+    <div class="tab-content" style="background: white">
+        <div role="tabpanel" class="tab-pane active p-4 mx-4" id="tab1">
+            <br><h4><b>All users</b></h4>
+            <div id="contentTable" class="container-white">
+
+
+            </div>
         </div>
-        <div class="container-custom container-header-admin-panel-tab">
-            <a href="/add"><h4 class="text-blue">New User</h4></a>
+
+        <div role="tabpanel" class="tab-pane" id="tab2">
+                <div class="shadow-lg container-my">
+                    <h4 class="text-black-50">Add new user</h4>
+                </div>
+                <div class="container-white">
+                    <form>
+                        <div class="container-add">
+                            <h4 class="text-black-50">Email</h4>
+                            <input type="email" id="addEmail" name="email" class="form-control" placeholder="Email" style="width: 400px"
+                                   required="">
+                            <h4 class="text-black-50">Login</h4>
+                            <input type="text" id="addName" name="name" class="form-control" placeholder="Login" required="">
+                            <h4 class="text-black-50">Password</h4>
+                            <input type="password" id="addPassword" name="password" class="form-control" placeholder="Password" required="">
+                            <h4 class="text-black-50">Role</h4>
+                            <select name="role" id="addRole" class="form-control" th:placeholder="Role" required="">
+                                <option>USER</option>
+                                <option>ADMIN</option>
+                            </select>
+                            <!--                <optional type="text" value="USER" name="role" class="form-control" placeholder="Role" required="">-->
+                            <button onclick="addUser()" class="btn btn-lg btn-success btn-block" type="button" style="width: 200px">Add new user
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="shadow-lg container-my">
-        <h4 class="text-black-50">All Users</h4>
-    </div>
-    <div class="container-white">
-        <table class="table table-striped container-white">
-            <th:block th:each="appUser, iterStat : ${users}" >
-
-                <tr>
-                    <td th:text="${appUser.id}">Id</td>
-                    <td th:text="${appUser.roles}">Role</td>
-                    <td th:text="${appUser.name}">Login</td>
-                    <td th:text="${appUser.password}">Password</td>
-                    <td th:text="${appUser.email}">Email</td>
-                    <td>
-
-                        <button type="button" class="btn btn-primary active btn-custom"
-                                data-toggle="modal" th:attr="data-target='#myModal' + ${iterStat.index}"
-                                aria-pressed="true" name="edit">Edit
-                        </button>
-                        <form th:method="post" th:action="@{/edit}">
-                            <div class="modal fade" th:id="myModal + ${iterStat.index}" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 th:text="'Edit user  ' + ${iterStat.current.name}"></h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-add">
-                                                <h4 class="text-black-50" style="text-align: center">ID</h4>
-                                                <input type="number" name="id" class="form-control"
-                                                       th:value="${iterStat.current.id}" style="width: 400px" disabled />
-                                                <h4 class="text-black-50" style="text-align: center">Email</h4>
-                                                <input type="email" name="email" class="form-control"
-                                                       th:value="${iterStat.current.email}" />
-                                                <h4 class="text-black-50" style="text-align: center">Login</h4>
-                                                <input type="text" name="name" class="form-control"
-                                                       th:value="${iterStat.current.name}" />
-                                                <h4 class="text-black-50" style="text-align: center">Password</h4>
-                                                <input type="password" name="password" class="form-control"/>
-                                                <h4 class="text-black-50" style="text-align: center">Role</h4>
-                                                <select name="role" class="form-control" th:placeholder="Role" required="">
-                                                    <option>USER</option>
-                                                    <option>ADMIN</option>
-                                                </select>
-                                                <input type="hidden" name="id" th:value="${iterStat.current.id}" />
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary">Close
-                                                </button>
-                                                <button type="submit" class="btn btn-primary">Edit user</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <form method="post" action="/delete">
-                            <input type="submit" class="btn btn-primary active btn-custom" value="Удалить"
-                                   role="button" aria-pressed="true" name="delete">
-                            <input type="hidden" th:value="${appUser.id}" name="id">
-                        </form>
-                    </td>
-                </tr>
-
-            </th:block>
-        </table>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="js/bootstrap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+$("ul li a ").toggleClass("active");
+</script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/userList.js"></script>
+        <script src="js/delete.js"></script>
+        <script src="js/edit.js"></script>
+        <script src="js/add.js"></script>
 </body>
 </html>

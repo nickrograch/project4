@@ -12,9 +12,6 @@ import java.security.Principal;
 @Controller
 public class HelloController {
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/hello")
     public String hello(Principal principal, Model model, Authentication authentication){
         model.addAttribute("user", principal);
